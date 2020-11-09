@@ -1,8 +1,11 @@
 name: Deploy to docker hub
 
 on:
-   push:
-     branches:    
+  push:
+    branches:    
+      - master
+  workflow_dispatch:
+    branches:
       - master
 
 jobs:
