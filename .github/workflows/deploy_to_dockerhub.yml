@@ -10,19 +10,21 @@ jobs:
       DOCKER_USERNAME: darkmattercoder
     steps:
       - uses: actions/checkout@master
+      - name: Build image
+        if: success()
+        run: ci/build-dockerimage.sh ${GITHUB_REPOSITORY} ${IMAGE_TAG} .
+      - name: Test image
+        if: success()
+        run: ci/test-dockerimage.sh ${GITHUB_REPOSITORY} ${IMAGE_TAG} test.md
       - name: Login to docker hub
         if: success()
         uses: actions-hub/docker/login@master
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - name: Build image
-        if: success()
-        run: ci/build-dockerimage.sh ${GITHUB_REPOSITORY} ${IMAGE_TAG} .
       - name: Push to docker registry
         if: success()
         uses: actions-hub/docker@master
+        env: 
+          IMAGE_TAG: latest
         with:
-          args: push ${GITHUB_REPOSITORY}:${IMAGE_TAG}
-      # - name: Push to docker registry
-      #   if: success()
-      #   run: ci/dockerhub-push.sh ${GITHUB_REPOSITORY} ${IMAGE_TAG}
+          args: push ${GITHUB_REPOSITORY}:latest
