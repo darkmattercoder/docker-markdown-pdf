@@ -27,4 +27,4 @@ jobs:
         env: 
           IMAGE_TAG: latest
         with:
-          args: push ${GITHUB_REPOSITORY}:latest
+          args: push ${GITHUB_REPOSITORY}:${IMAGE_TAG}
